@@ -2,6 +2,7 @@
 Streamlining Your Kubernetes Deployments: A Step-by-Step Guide to Ingress Controller Configuration
 
 Introduction:
+
 In Kubernetes, an Ingress Controller is an important component that helps manage incoming traffic to your application. It acts as a traffic manager for incoming requests and routes them to the appropriate backend service. It provides a way to control the external traffic that flows into your Kubernetes cluster.
 An Ingress Controller is a Kubernetes resource that acts as a reverse proxy for HTTP(S) traffic. It exposes a set of rules that define how incoming traffic should be routed to the corresponding backend services. An Ingress Controller can help simplify traffic routing, enable SSL termination, and allow multiple services to share a single IP address.
 Without an Ingress Controller, incoming traffic to your Kubernetes cluster must be routed to the correct service through a Kubernetes LoadBalancer, NodePort, or ClusterIP service. This can be complicated and time-consuming, especially if you have multiple services that need to be exposed externally.
@@ -28,6 +29,8 @@ Step 1: Choose an Ingress Controller:
 There are several Ingress Controllers available in Kubernetes, such as NGINX, Traefik, and HAProxy. You need to choose the one that best fits your needs based on features, performance, and ease of use. Each Ingress Controller has its own configuration options and installation process. For this blog, we will choose NGINX as the Ingress Controller.
 Step 2: Install the Ingress Controller:
 After choosing an Ingress Controller, you need to install it in your Kubernetes cluster. Each Ingress Controller has its own installation instructions, which can usually be found on their website. In the case of NGINX, you can install it using the following YAML file:
+
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -80,6 +83,9 @@ spec:
       targetPort: 443
   selector:
     app: nginx-ingress
+    
+    
+    
 This YAML file creates a Deployment and Service for the NGINX Ingress Controller, which will be used to route external traffic to the services in the cluster. The Service type is NodePort, which means that the NGINX Ingress Controller will be exposed on a port on each node in the cluster.
 To install the Ingress Controller, save the above YAML file to a file named nginx-ingress.yaml, and then run the following command:
 kubectl apply -f nginx-ingress.yaml
@@ -93,6 +99,9 @@ kubectl logs <nginx-ingress-pod-name>
 Step 4: Configure Ingress Resources:
 Once the Ingress Controller is installed, you can define Ingress resources to route incoming external traffic to your backend services. An Ingress resource is a Kubernetes resource that defines rules for how incoming requests should be routed based on the requested host and URL path. You can define one or more Ingress resources for each service in your application.
 To create an Ingress resource, you need to create a YAML file that defines the rules for the Ingress. Here is an example of an Ingress YAML file:
+
+  
+  
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -109,6 +118,9 @@ spec:
             name: app1-service
             port:
               name: http
+  
+  
+  
 This Ingress resource defines a rule for routing traffic to the app1 service when the requested URL path starts with /app1. It also specifies the mydomain.com as the hostname to use for the Ingress.
 Step 5: Test the Ingress Controller
 Once you have installed and configured the Ingress Controller and defined Ingress resources, the next step is to test the Ingress Controller to ensure that it is correctly routing traffic to your backend services.
@@ -118,7 +130,9 @@ Assuming that you have set up the Ingress to route traffic to the my-service bac
 curl http://<ingress-hostname>/path
 Replace <ingress-hostname> with the hostname specified in the Ingress rules and <path> with the path that routes to the my-service backend service.
 For example, if your Ingress specifies mydomain.com as the hostname and /my-service as the path to route to the my-service backend service, you can test the Ingress by sending a request as follows:
+  
 curl http://mydomain.com/my-service
-If the Ingress is correctly routing traffic to the my-service backend service, you should see the expected response from the service. If not, you may need to troubleshoot the Ingress configuration and ensure that it is correctly defined.
+
+  If the Ingress is correctly routing traffic to the my-service backend service, you should see the expected response from the service. If not, you may need to troubleshoot the Ingress configuration and ensure that it is correctly defined.
 Conclusion 
 Deploying an Ingress Controller is a crucial step in setting up a Kubernetes cluster that can serve external traffic to your application. In this blog post, we have outlined the steps involved in deploying and testing an Ingress Controller, including choosing an appropriate controller, installing it, verifying the installation, configuring Ingress resources, and testing the controller. By following these steps and testing the Ingress Controller, you can ensure that your application is correctly serving external traffic and delivering a high-quality user experience. Whether you are deploying a new application or updating an existing one, taking the time to set up and test your Ingress Controller is an essential step in the process.
